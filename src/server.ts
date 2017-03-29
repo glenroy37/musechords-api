@@ -25,7 +25,7 @@ class Server {
         Users.getInstance().init(true).then(function(){
             Users.getInstance().newUser("Glenroy", "teier@kagent.at", "123456").then(function(){
                 Sheets.getInstance().init(true).then(function(){
-                    res.send("Token Router works");
+                    res.send("Database Reset done");
                     next();
                 });
             });
@@ -44,7 +44,10 @@ class Server {
 
     this.express.use('/', router);
     this.express.use('/sheets', SheetRouter);
-    this.express.use('/token', TokenRouter);  
+    this.express.use('/token', TokenRouter);
+
+    //JUST FOR DEBUG
+    this.express.use('/db', this.initialize);
   }
 
 }

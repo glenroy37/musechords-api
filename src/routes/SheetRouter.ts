@@ -65,13 +65,12 @@ export class SheetRouter {
 
     init() {
         this.router.use(JWTMiddleWare.authentificate);
+        this.router.use(SheetRouter.corsSheets);
         this.router.get('/:sheetId', this.getSpecificSheet);
         this.router.put('/:sheetId', this.updateSheet);
         this.router.delete('/:sheetId', this.deleteSheet);
         this.router.get('/', this.getAllSheets);
         this.router.post('/', this.newSheet);
-        this.router.options('/', SheetRouter.corsSheets);
-        this.router.options('/:sheetId', SheetRouter.corsSheets);
     }
 }
 

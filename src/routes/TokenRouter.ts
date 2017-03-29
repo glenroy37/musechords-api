@@ -38,8 +38,8 @@ export class TokenRouter {
     }
 
   init() {
+    this.router.use(TokenRouter.corsToken);
     this.router.post('/', this.post);
-    this.router.options('/', TokenRouter.corsToken);
   }
 }
 
