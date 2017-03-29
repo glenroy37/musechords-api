@@ -1,7 +1,8 @@
 import {Router, Request, Response, NextFunction} from 'express';
+import Users from "../model/Users";
 
 export class TokenRouter {
-  router: Router
+  router: Router;
 
   constructor() {
     this.router = Router();
@@ -9,11 +10,13 @@ export class TokenRouter {
   }
 
   public get(req: Request, res: Response, next: NextFunction) {
+    Users.getInstance().init(true);
     res.send("Token Router works");
   }
 
   init() {
     this.router.get('/', this.get);
+
   }
 }
 
