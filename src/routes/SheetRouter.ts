@@ -51,6 +51,18 @@ export class SheetRouter {
         });
     }
 
+    public static corsSheets(req: Request, res: Response, next: NextFunction){
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Credentials', 'false');
+        res.header('Access-Control-Allow-Headers', 'Content-Type,token');
+        if (req.params.sheetId != null) {
+            res.header('Access-Control-Allow-Methods', 'PUT,DELETE');
+        } else{
+            res.header('Access-Control-Allow-Methods', 'GET,POST');
+        }
+        next();
+    }
+
     init() {
         this.router.use(JWTMiddleWare.authentificate);
         this.router.get('/:sheetId', this.getSpecificSheet);
@@ -58,6 +70,8 @@ export class SheetRouter {
         this.router.delete('/:sheetId', this.deleteSheet);
         this.router.get('/', this.getAllSheets);
         this.router.post('/', this.newSheet);
+        this.router.options('/', SheetRouter.corsSheets);
+        this.router.options('/:sheetId', SheetRouter.corsSheets);
     }
 }
 

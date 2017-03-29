@@ -29,8 +29,17 @@ export class TokenRouter {
     });
   }
 
+    public static corsToken(req: Request, res: Response, next: NextFunction){
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Credentials', 'false');
+        res.header('Access-Control-Allow-Headers', 'Content-Type,token');
+        res.header('Access-Control-Allow-Methods', 'POST');
+        next();
+    }
+
   init() {
     this.router.post('/', this.post);
+    this.router.options('/', TokenRouter.corsToken);
   }
 }
 
