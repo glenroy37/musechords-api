@@ -47,7 +47,7 @@ class Server {
     this.express.use('/token', TokenRouter);
 
     //JUST FOR DEBUG
-    this.express.use('/db', this.initialize);
+    this.express.get('/db', this.initialize);
   }
 
 }
