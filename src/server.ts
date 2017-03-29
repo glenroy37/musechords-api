@@ -3,6 +3,8 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import TokenRouter from './routes/TokenRouter';
+import SheetRouter from './routes/SheetRouter';
+import {JWTMiddleWare} from "./middle-ware/JWTMiddleWare";
 
 class Server {
 
@@ -24,6 +26,8 @@ class Server {
     let router = express.Router();
 
     this.express.use('/', router);
+    this.express.use('/sheets', JWTMiddleWare.authentificate);
+    this.express.use('/sheets', SheetRouter);
     this.express.use('/token', TokenRouter);  
   }
 
