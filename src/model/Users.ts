@@ -2,6 +2,7 @@ import DBConnection from "./DBConnection";
 import * as Sequelize from "sequelize";
 import Bluebird = require("bluebird");
 import * as PasswordHash from "password-hash";
+import {ModelManager} from "./Model";
 
 
 export interface UserAttribute{
@@ -17,13 +18,14 @@ export interface UserInstance extends Sequelize.Instance<UserAttribute>, UserAtt
 
 export interface UserModel extends Sequelize.Model<UserInstance, UserAttribute>{ }
 
-export default class UserManager{
+export default class UserManager extends ModelManager{
     private static _instance: UserManager = new UserManager();
 
     sequelize: Sequelize.Sequelize;
     User: UserModel;
 
     constructor(){
+        super();
         if(UserManager._instance){
             throw new Error("Tried to create second singleton of UserManger");
         }
@@ -60,27 +62,17 @@ export default class UserManager{
         return UserManager._instance;
     }
 
-    public init(newTable?:boolean):Bluebird<any> {
-        newTable = newTable || false;
-        if(newTable){
-            return this.sequelize.sync({force: true});
-        }
-        return null;
-    }
-
     public newUser(name:string, email:string, rawPassword:string):Bluebird<any> {
-        return this.sequelize.transaction((transaction:Sequelize.Transaction) => {
-            let password = PasswordHash.generate(rawPassword);
-            return this.User
-                .create({
-                    name: name,
-                    email: email,
-                    password: password
-                }, {transaction: transaction})
-        });
+        let password = PasswordHash.generate(rawPassword);
+        return this.User
+            .create({
+                name: name,
+                email: email,
+                password: password
+            });
     }
 
-    public getUserByPasswordAndName(name:string, password:string): Bluebird<any> {
-        return this.User.find({where: {name: name, password:password}});
+    public getUserByPasswordAndName(name:string): Bluebird<any> {
+        return this.User.findOne({where: {name: name}});
     }
 }

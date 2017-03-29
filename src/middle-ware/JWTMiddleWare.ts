@@ -6,7 +6,14 @@ import {JWT, JWTObject} from "../jwt";
 
 export class JWTMiddleWare{
     public static authentificate(req: Request, res: Response, next: NextFunction){
-        let jwtObject: JWTObject = JWT.verify(req.params.token);
-        req.params.token = jwtObject;
+        let jwtObject: JWTObject = JWT.verify(req.headers["token"]);
+        if(req.body != null) {
+            req.body.originalBody = req.body;
+            req.body.jwtObject = jwtObject;
+        } else {
+            req.body = {jwtObject: jwtObject};
+        }
+        console.log(JSON.stringify(req.body.jwtObject));
+        next();
     }
 }

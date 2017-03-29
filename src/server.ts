@@ -1,10 +1,15 @@
-import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+import Users from './model/Users';
+import Sheets from './model/Sheets';
 import TokenRouter from './routes/TokenRouter';
 import SheetRouter from './routes/SheetRouter';
 import {JWTMiddleWare} from "./middle-ware/JWTMiddleWare";
+import Request = express.Request;
+import Response = express.Response;
+import NextFunction = express.NextFunction;
+
 
 class Server {
 
@@ -15,8 +20,20 @@ class Server {
     this.middleware();
     this.routes();
   }
+    //JUST FOR DEBUG
+    public initialize(req: Request, res: Response, next: NextFunction): void {
+        Users.getInstance().init(true).then(function(){
+            Users.getInstance().newUser("Glenroy", "teier@kagent.at", "123456").then(function(){
+                Sheets.getInstance().init(true).then(function(){
+                    res.send("Token Router works");
+                    next();
+                });
+            });
+        });
+    }
 
-  private middleware(): void {
+
+    private middleware(): void {
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +43,6 @@ class Server {
     let router = express.Router();
 
     this.express.use('/', router);
-    this.express.use('/sheets', JWTMiddleWare.authentificate);
     this.express.use('/sheets', SheetRouter);
     this.express.use('/token', TokenRouter);  
   }

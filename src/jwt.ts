@@ -14,7 +14,9 @@ export class JWT{
 
 export class JWTObject{
     public username: string;
-    constructor(username: string){
+    public userId: number;
+    constructor(username: string, userId: number){
         this.username = username;
+        this.userId = userId;
     }
 }
