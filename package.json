@@ -4,6 +4,7 @@
   "description": "The API of MuseChords",
   "main": "index.js",
   "scripts": {
+    "start": "forever start dist/index.js",
     "server": "node dist/index.js",
     "test": "mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'"
   },
