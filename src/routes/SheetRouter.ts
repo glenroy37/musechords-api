@@ -20,13 +20,14 @@ export class SheetRouter {
     }
 
     public getAllSheets(req: Request, res: Response, next: NextFunction) {
-        Sheets.getInstance().getSheetsByUser(req.body.jwtObject.username).then(function(sheets){
+        Sheets.getInstance().getSheetsByUser(req.body.jwtObject.userId).then(function(sheets){
             res.send(sheets);
             next();
         });
     }
 
     public newSheet(req: Request, res: Response, next: NextFunction) {
+        req.body.originalBody.userId = req.body.jwtObject.userId;
         Sheets.getInstance().createSheet(req.body.originalBody).then(function(sheet){
             res.send(sheet);
             next();
