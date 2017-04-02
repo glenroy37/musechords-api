@@ -56,11 +56,7 @@ export class SheetRouter {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Credentials', 'false');
         res.header('Access-Control-Allow-Headers', 'Content-Type,token');
-        if (req.params.sheetId != null) {
-            res.header('Access-Control-Allow-Methods', 'PUT,DELETE');
-        } else{
-            res.header('Access-Control-Allow-Methods', 'GET,POST');
-        }
+        res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
         next();
     }
 
