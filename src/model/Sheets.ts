@@ -87,15 +87,15 @@ export default class SheetManager extends ModelManager{
         return this.Sheet.findAll({where: {userId: userId}});
     }
 
-    public getSheetById(sheetId: number): Bluebird<any>{
-        return this.Sheet.find({where: {id: sheetId}});
+    public getSheetById(sheetId: number, userId: number): Bluebird<any>{
+        return this.Sheet.find({where: {id: sheetId, userId:userId}});
     }
 
-    public updateSheet(sheet: SheetAttribute): Bluebird<any> {
-        return this.Sheet.update(sheet, {where: {id: sheet.id}});
+    public updateSheet(sheet: SheetAttribute, userId: number): Bluebird<any> {
+        return this.Sheet.update(sheet, {where: {id: sheet.id, userId: userId}});
     }
 
-    public deleteSheet(sheetId: number): Bluebird<any>{
-        return this.Sheet.destroy({where: {id:sheetId}});
+    public deleteSheet(sheetId: number, userId: number): Bluebird<any>{
+        return this.Sheet.destroy({where: {id:sheetId, userId: userId}});
     }
 }

@@ -13,7 +13,7 @@ export class SheetRouter {
     }
 
     public getSpecificSheet(req: Request, res: Response, next: NextFunction) {
-        Sheets.getInstance().getSheetById(req.params.sheetId).then(function(sheet){
+        Sheets.getInstance().getSheetById(req.params.sheetId, req.body.jwtObject.userId).then(function(sheet){
             res.send(sheet);
             next();
         });
@@ -35,7 +35,7 @@ export class SheetRouter {
     }
 
     public deleteSheet(req: Request, res: Response, next: NextFunction) {
-        Sheets.getInstance().deleteSheet(req.params.sheetId).then(function (count) {
+        Sheets.getInstance().deleteSheet(req.params.sheetId, req.body.jwtObject.userId).then(function (count) {
            res.send({affectedRows: count});
            next();
         });
@@ -46,7 +46,7 @@ export class SheetRouter {
             res.send("Invalid Body");
             next();
         }
-        Sheets.getInstance().updateSheet(req.body.originalBody).then(function(count){
+        Sheets.getInstance().updateSheet(req.body.originalBody, req.body.jwtObject.userId).then(function(count){
             res.send({affectedRows: count});
             next();
         });

@@ -21,7 +21,7 @@ class Server {
     this.routes();
   }
     //JUST FOR DEBUG
-    public initialize(req: Request, res: Response, next: NextFunction): void {
+    /*public initialize(req: Request, res: Response, next: NextFunction): void {
         Users.getInstance().init(true).then(function(){
             Users.getInstance().newUser("Glenroy", "teier@kagent.at", "123456").then(function(){
                 Sheets.getInstance().init(true).then(function(){
@@ -30,7 +30,7 @@ class Server {
                 });
             });
         });
-    }
+    }*/
 
 
     private middleware(): void {
@@ -47,7 +47,7 @@ class Server {
     this.express.use('/token', TokenRouter);
 
     //JUST FOR DEBUG
-    this.express.get('/db', this.initialize);
+    //this.express.get('/db', this.initialize);
   }
 
 }
