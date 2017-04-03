@@ -46,8 +46,7 @@ gulp.task('createUser', function(){
     return;
   }
   if(Users){
-    Users.default.getInstance().newUser(argv.username, argv.email,
-      passwordHash.generate(argv.password)).then(function(){
+    Users.default.getInstance().newUser(argv.username, argv.email, argv.password).then(function(){
       console.log("User created");
     });
   }
