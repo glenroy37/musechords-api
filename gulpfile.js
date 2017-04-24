@@ -3,6 +3,9 @@ const ts = require('gulp-typescript');
 const JSON_FILES = ['src/*.json', 'src/**/*.json'];
 const passwordHash = require("password-hash");
 const  argv = require('yargs').argv;
+const xml2js = require('xml2js');
+const fs = require('fs');
+var parser = new xml2js.Parser();
 
 let Users;
 let Sheets;
@@ -10,7 +13,7 @@ try{
   Users = require('./dist/model/Users.js');
   Sheets = require('./dist/model/Sheets.js');
 } catch (err) {
-  console.log("To use DB reset and create User please compile the project first");
+  console.log("To use DB reset, create User and import please compile the project first");
 }
 
 const tsProject = ts.createProject('tsconfig.json');
@@ -50,6 +53,34 @@ gulp.task('createUser', function(){
       console.log("User created");
     });
   }
+});
+
+gulp.task('import', function(){
+  if(argv.source == null || argv.userid == null){
+    console.log("You need to specify --source and --userid");
+    return;
+  }
+  fs.readFile(__dirname + "/"+ argv.source, function(err, data){
+    console.log(__dirname+"/"+argv.source);
+    parser.parseString(data, function(err, result){
+      if(err){
+        console.log(err);
+        return;
+      }
+      const song = {
+        title: result.song.title[0],
+        capo: 0,
+        author: result.song.author[0],
+        timesig: result.song.timesig[0],
+        transpose: 0,
+        lyrics: result.song.lyrics[0],
+        userId: argv.userId
+      };
+      Sheets.default.getInstance().createSheet(song).then(function(){
+        console.log("Sheet imported");
+      });
+    });
+  });
 });
 
 gulp.task('default', ['watch', 'assets']);
